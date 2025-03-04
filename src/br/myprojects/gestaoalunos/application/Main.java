@@ -12,11 +12,9 @@ public class Main {
         do {
             Aluno aluno = obterAluno();
 
-            JOptionPane.showMessageDialog(null, "Aluno: " + aluno.getNome() +
-                    "\nMédia: " + aluno.getMedia() +
-                    "\nSituação: " + aluno.getSituacao());
+            JOptionPane.showMessageDialog(null, aluno, "Dados do Aluno", JOptionPane.INFORMATION_MESSAGE);
 
-            continuarEntrada = JOptionPane.showConfirmDialog(null, "Deseja realizar um novo cálculo?") == JOptionPane.YES_OPTION;
+            continuarEntrada = JOptionPane.showConfirmDialog(null, "Deseja realizar uma nova entrada?", "Nova entrada", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
 
         } while (continuarEntrada);
     }

@@ -78,4 +78,10 @@ public class Aluno {
 
         return "Reprovado";
     }
+
+    public String toString() {
+        return "Nome: " + getNome() +
+            "\nMédia: " + getMedia() +
+            "\nSituação: " + getSituacao();
+    }
 }
