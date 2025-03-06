@@ -8,28 +8,38 @@ public class Main {
 
     public static void main(String[] args) {
         boolean continuarEntrada = false;
+        Aluno alunoAnterior = null;
 
         do {
             Aluno aluno = obterAluno();
+
+            while (aluno.equals(alunoAnterior)) {
+                JOptionPane.showMessageDialog(null, "Aluno já cadastrado", "Aluno duplicado", JOptionPane.WARNING_MESSAGE);
+
+                aluno = obterAluno();
+            }
 
             JOptionPane.showMessageDialog(null, aluno, "Dados do Aluno", JOptionPane.INFORMATION_MESSAGE);
 
             continuarEntrada = JOptionPane.showConfirmDialog(null, "Deseja realizar uma nova entrada?", "Nova entrada", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
 
+            alunoAnterior = aluno;
+
         } while (continuarEntrada);
     }
 
     private static Aluno obterAluno() {
-        String nome;
+        String nome, documento;
         float nota1, nota2, nota3, nota4;
 
         nome = obterNome();
+        documento = obterDocumento();
         nota1 = obterNota(1);
         nota2 = obterNota(2);
         nota3 = obterNota(3);
         nota4 = obterNota(4);
 
-        return new Aluno(nome, nota1, nota2, nota3, nota4);
+        return new Aluno(nome, documento, nota1, nota2, nota3, nota4);
     }
 
     private static String obterNome() {
@@ -50,6 +60,22 @@ public class Main {
         }
 
         return nome;
+    }
+
+    private static String obterDocumento() {
+        String documento = null;
+        boolean entradaValida = false;
+
+        while (!entradaValida) {
+            documento = JOptionPane.showInputDialog(null, "Informe o número do documento");
+
+            entradaValida = documento != null && !documento.isBlank() && documento.length() == 11;
+
+            if (!entradaValida)
+                JOptionPane.showMessageDialog(null, "Entrada Inválida. Documento precisa ter 11 dígitos.", "Dados Aluno", JOptionPane.ERROR_MESSAGE);
+        }
+
+        return documento;
     }
 
     private static float obterNota(int bimestre) {

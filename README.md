@@ -8,7 +8,9 @@ O projeto consiste em uma pequena sistema para gerenciar o cadastro de alunos de
 
 ## Regras de negócio
 
-- Será solicitado o nome do aluno, com pelo menos 2 caracteres
+- Dados solicitados do aluno
+  - Nome, com pelo menos 2 caracteres
+  - Documento, com 11 dígitos
 - A média será calculada com base nas notas inseridas no sistema
 - A nota de cada bimestre estará entre 0 e 10
 - Para validação da situação, o sistema calcula uma média auxiliar, somando o valor de _0.25_ à media calculada anteriormente
