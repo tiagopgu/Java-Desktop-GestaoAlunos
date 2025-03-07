@@ -1,6 +1,9 @@
 package br.myprojects.gestaoalunos.application;
 
 import br.myprojects.gestaoalunos.domain.Aluno;
+import br.myprojects.gestaoalunos.domain.Atividade;
+import br.myprojects.gestaoalunos.domain.Curso;
+import br.myprojects.gestaoalunos.domain.Disciplina;
 
 import javax.swing.*;
 
@@ -19,7 +22,9 @@ public class Main {
                 aluno = obterAluno();
             }
 
-            JOptionPane.showMessageDialog(null, aluno, "Dados do Aluno", JOptionPane.INFORMATION_MESSAGE);
+            aluno.setCurso(criarCurso());
+
+            escreverDados(aluno);
 
             continuarEntrada = JOptionPane.showConfirmDialog(null, "Deseja realizar uma nova entrada?", "Nova entrada", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
 
@@ -34,12 +39,8 @@ public class Main {
 
         nome = obterNome();
         documento = obterDocumento();
-        nota1 = obterNota(1);
-        nota2 = obterNota(2);
-        nota3 = obterNota(3);
-        nota4 = obterNota(4);
 
-        return new Aluno(nome, documento, nota1, nota2, nota3, nota4);
+        return new Aluno(nome, documento);
     }
 
     private static String obterNome() {
@@ -78,17 +79,88 @@ public class Main {
         return documento;
     }
 
-    private static float obterNota(int bimestre) {
-        float nota = -1F;
+    private static Curso criarCurso() {
+        Curso curso = new Curso(1, "Java e Orientação a Objetos");
 
-        while (nota < 0 || nota > 10) {
-            nota = Float.parseFloat(JOptionPane.showInputDialog(null, "Informe a nota do " + bimestre + "º bimestre"));
+        Disciplina disciplina = new Disciplina(1, "Lógica de Programação");
+        disciplina.adicionarAtividade(new Atividade(1, "Lista de Exercícios 1", 2F));
+        disciplina.adicionarAtividade(new Atividade(2, "Pesquisa Estrutura de Dados", 2F));
+        disciplina.adicionarAtividade(new Atividade(3, "Lista de Exercícios 2", 2F));
+        disciplina.adicionarAtividade(new Atividade(4, "Exercício Lógica", 1F));
+        disciplina.adicionarAtividade(new Atividade(5, "Avaliação Final", 3F));
 
-            if (nota < 0 || nota > 10) {
-                JOptionPane.showMessageDialog(null, "A nota deve estar entre 0 e 10");
-            }
+        curso.adicionarDisciplina(disciplina);
+
+        disciplina = new Disciplina(2, "Orientação a Objetos");
+        disciplina.adicionarAtividade(new Atividade(1, "Lista de Exercícios 1", 1.5F));
+        disciplina.adicionarAtividade(new Atividade(2, "Pesquisa sobre UML", 2F));
+        disciplina.adicionarAtividade(new Atividade(3, "Avaliação", 2F));
+        disciplina.adicionarAtividade(new Atividade(4, "Lista de Exercícios 2", 1.5F));
+        disciplina.adicionarAtividade(new Atividade(5, "Avaliação Final", 3F));
+
+        curso.adicionarDisciplina(disciplina);
+
+        disciplina = new Disciplina(3, "Arrays");
+        disciplina.adicionarAtividade(new Atividade(1, "Lista de Exercícios 1", 3F));
+        disciplina.adicionarAtividade(new Atividade(2, "Lista de Exercícios 2", 3F));
+        disciplina.adicionarAtividade(new Atividade(3, "Avaliação Final", 4F));
+
+        curso.adicionarDisciplina(disciplina);
+
+        disciplina = new Disciplina(4, "Eclipse");
+        disciplina.adicionarAtividade(new Atividade(1, "Atividades Prática", 5F));
+        disciplina.adicionarAtividade(new Atividade(2, "Avaliação Final", 5F));
+
+        curso.adicionarDisciplina(disciplina);
+
+        disciplina = new Disciplina(5, "Atributos e Métodos de Classe");
+        disciplina.adicionarAtividade(new Atividade(1, "Lista de Exercícios 1", 2.5F));
+        disciplina.adicionarAtividade(new Atividade(2, "Lista de Exercícios 2", 2.5F));
+        disciplina.adicionarAtividade(new Atividade(3, "Avaliação Final", 5F));
+
+        curso.adicionarDisciplina(disciplina);
+
+        disciplina = new Disciplina(6, "Encapsulamento");
+        disciplina.adicionarAtividade(new Atividade(1, "Lista de Exercícios 1", 1.5F));
+        disciplina.adicionarAtividade(new Atividade(2, "Avaliação 1", 2F));
+        disciplina.adicionarAtividade(new Atividade(3, "Lista de Exercícios 2", 1.5F));
+        disciplina.adicionarAtividade(new Atividade(4, "Avaliação Final", 5F));
+
+        curso.adicionarDisciplina(disciplina);
+
+        disciplina = new Disciplina(7, "Herança");
+        disciplina.adicionarAtividade(new Atividade(1, "Lista de Exercícios 1", 2.5F));
+        disciplina.adicionarAtividade(new Atividade(2, "Lista de Exercícios 2", 2.5F));
+        disciplina.adicionarAtividade(new Atividade(3, "Avaliação Final", 5F));
+
+        curso.adicionarDisciplina(disciplina);
+
+        disciplina = new Disciplina(8, "Polimorfismo");
+        disciplina.adicionarAtividade(new Atividade(1, "Lista de Exercícios 1", 2F));
+        disciplina.adicionarAtividade(new Atividade(2, "Avaliação 1", 2F));
+        disciplina.adicionarAtividade(new Atividade(3, "Lista de Exercícios 2", 2F));
+        disciplina.adicionarAtividade(new Atividade(4, "Avaliação Final", 4F));
+
+        curso.adicionarDisciplina(disciplina);
+
+        disciplina = new Disciplina(10, "Classes abstratas");
+        disciplina.adicionarAtividade(new Atividade(1, "Lista de Exercícios 1", 2F));
+        disciplina.adicionarAtividade(new Atividade(2, "Lista de Exercícios 2", 3F));
+        disciplina.adicionarAtividade(new Atividade(3, "Avaliação Final", 5F));
+
+        curso.adicionarDisciplina(disciplina);
+
+        return curso;
+    }
+
+    private static void escreverDados(Aluno aluno) {
+        String saida = aluno +
+                "\n     Grade Curricular:";
+
+        for(Disciplina disciplina : aluno.getCurso().getDisciplinas()) {
+            saida += "\n        " + disciplina;
         }
 
-        return nota;
+        JOptionPane.showMessageDialog(null, saida, "Dados do Aluno", JOptionPane.INFORMATION_MESSAGE);
     }
 }
