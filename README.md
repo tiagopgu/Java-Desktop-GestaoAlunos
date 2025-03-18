@@ -4,45 +4,101 @@
 
 ## Introdução
 
-O projeto consiste em uma pequena sistema para gerenciar o cadastro de alunos de uma escola. O sistema terá módulos para cadastro e para gerenciamento de notas.
+O projeto consiste em um sistema para gerenciar os alunos e cursos de uma escola. O sistema terá módulos para cadastro de alunos, cursos e para o gerenciamento de notas e atividades.
 
 ## Regras de negócio
 
-- Cadastro do aluno
-  - Dados solicitados
+- Aluno
+  - Devem ser cadastrados os seguintes dados
     - Nome, com pelo menos 2 caracteres (obrigatório)
     - Documento, com 11 dígitos (obrigatório)
       - Identifica o aluno
       - Não podem existir dois alunos com o mesmo documento
-  - Um aluno estará matriculado em um curso
-- Cadastro de curso
-  - Dados solicitados
+    - Data da matrícula (obrigatório)
+    - Número da matrícula (obrigatório)
+    - Sexo (obrigatório)
+    - Data de Nascimento (obrigatório)
+    - E-mail (obrigatório)
+      - Deve ser único
+  - Um aluno estará matriculado em um ou mais cursos
+    - Para cada curso, fará parte de uma turma
+    - Só é possível matricular se existir turma em andamento e aberta para matrícula no curso
+- Curso
+  - Devem ser cadastros os seguintes dados:
     - Código (obrigatório)
     - Nome (obrigatório)
     - Descrição
-  - Possui um conjunto de disciplinas
-- Cadastro de disciplina
-  - Dados solicitados
-    - Código (obrigatório)
-    - Nome (obrigatório)
-    - Descrição
+    - Data de cadastro (obrigatório)
+  - Terá uma duração, que pode ser expressa em dias ou meses
+    - A duração será dividida em períodos. Por exemplo: Um curso que dura 12 meses (1 ano), pode ser dividido em dois períodos de 6 meses (semestral), 2 meses (bimestral), etc.
+      - Automaticamente será criada uma duração abrangendo todo o período do curso, podendo ser ajustada posteriormente
+      - Um período deve ter uma duração, expressa em dias ou meses
+        - A duração do período de ser entre 1 e a duração máxima do curso
+        - A soma da duração dos períodos não pode exceder a duração total do curso
+  - Terá um conjunto de turmas
+    - Uma turma terá os seguintes dados
+      - Código (obrigatório)
+      - Data Cadastro (obrigatório)
+      - Data de início (obrigatório)
+        - A data de conclusão será baseada na duração do curso, a partir do início da turma
+      - Período. Pode ser um dos seguintes:
+        - Matutino
+        - Vespertino
+        - Noturno
+        - Não aplicável
+      - Permite matrícula em andamento: indica se é permitido novas matrículas após início da turma
+  - Possui um conjunto de disciplinas, que serão as atividades curriculares obrigatórias
+    - Devem ser cadastrado os seguintes dados:
+      - Código (obrigatório)
+      - Nome (obrigatório)
+      - Descrição
+    - As disciplinas estarão dentro dos períodos, podendo abranger mais de um
+    - Podem ser agrupadas em módulos
+      - Um módulo terão os seguintes dados
+        - Código (obrigatório)
+        - Título (obrigatório)
+        - Descrição
+    - Terá um ou mais instrutor
+      - Dados para cadastro do instrutor
+        - Nome (obrigatório)
+        - Documento (obrigatório)
+          - Identifica o instrutor
+        - E-mail (obrigatório)
+          - Deve ser único
+        - Período onde irá ministrar. Pode ser um dos seguintes
+          - Matutino
+          - Vespertino
+          - Noturno
+          - Não aplicável
   - Uma disciplina terá um conjunto de atividades
-    - A média final será a soma das notas de todas as atividades
-    - A média final deve estar entre 0 e 10
-  - Deve ser retornada a situação na disciplina 
-    - A situação é analisada com base na média final
-      - O sistema calcula uma média auxiliar, somando o valor de _0.25_ à média final. Essa média auxiliar serve para arredondar a nota de um aluno, permitindo mudar sua situação caso falte alguns décimos
-    - São possíveis as seguintes situações:
-      - _Aprovado_, caso tenha média ou média auxiliar maior ou igual a 7
-      - _Em Recuperação_, para média, ou média auxiliar, maior ou igual a 5 e menor que 7
-      - _Reprovado_, para média ou média auxiliar menor que 5
-- Cadastro de Atividades
-  - Dados solicitados
-    - Código (obrigatório)
-    - Título (obrigatório)
-    - Descrição
-    - Nota máxima (obrigatório)
-    - Nota obtida
+    - Dados solicitados para o cadastro de atividades
+      - Código (obrigatório)
+      - Título (obrigatório)
+      - Descrição
+      - Nota máxima (obrigatório)
+        - Deve estar entre 0 e 10
+      - Peso: irá compor o cálculo da média final da disciplina
+        - Valor inteiro entre 1 e 10
+      - Nota obtida
+        - A nota obtida não poderá ser menor que 0 e nem maior que a nota máxima
+  - A soma das notas das atividades deve atingir o valor 10
+  - A soma das notas obtidas em todas as atividades não podem ser maior que 10
+  - A soma dos pesos de todas as atividades não pode ser superior a 10
+    - Automaticamente, o peso da atividade é igual a 1
+  - Terá uma média por período que será calculada da seguinte forma (NP - Nota Final no Período, NA - Nota da Atividade, PA - Peso da atividade, SP - Soma dos Pesos): NP = (NA1 * PA1 + NA2 * PA2 + ... + NAn * PAn) / SP
+    - Deve estar entre 0 e 10
+  - Terá uma média final
+    - Se abranger um único período, será a nota do período
+    - Se abranger mais de um período, será calculada da seguinte forma (MF - Média Final, MP - Média do Período, QP - Quantidade de período): MF = (MP1 + MP2 + ... + MPn) / QP
+    - O sistema calcula uma média auxiliar, somando o valor de _0.25_ à média final. Essa média auxiliar serve para arredondar a nota de um aluno, permitindo mudar sua situação caso falte alguns décimos
+    - Deve estar entre 0 e 10
+  - Terá uma situação, analisada com base na média final
+    - _Aprovado_, caso tenha média ou média auxiliar maior ou igual a 7
+    - _Em Recuperação_, para média, ou média auxiliar, maior ou igual a 5 e menor que 7
+      - Irá realizar uma atividade de recuperação, onde a nota final será obtida da seguinte forma (MF - Média Final, NAR - Nota Atividade Recuperação, MFA - Média Final Anterior): MF = (MFA + NAR) / 2
+      - Se a nova média final for maior ou igual a 5, será aprovado. Caso contrário, reprovado.
+      - A atividade de recuperação é especial e automaticamente a nota máxima é 10, não entrando na soma da nota total da disciplina. 
+    - _Reprovado_, para média ou média auxiliar menor que 5
 - Dados de apresentação
-  - Aluno: nome, documento, curso
+  - Aluno: nome, documento, cursos
   - Disciplinas: nome, média (não a média auxiliar) e situação.
